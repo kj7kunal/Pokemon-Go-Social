@@ -34,23 +34,9 @@ Pokemon GO Social is to be a React powered Social Networking site for the Pokemo
 
 ## Framework / Tools
 * Java (SpringBoot)
-  - Spring is one of the most-maintained but complex MVC java frameworks available, so has a steep learning curve.
-  - Documentation is excellent, and the community is helpful.
-  - Enables us to write clean modular code for developing web apps and has well built security features to go with it - SpringData and SpringSecurity
-  - SpringBoot is there to assist navigating through the complex framework easily using easy dependency management and auto configuration support
-  - Play has a new version which is Play 2 and that doesn't have a lot of documentation or support yet.
 * MySQL
 * Hibernate
-  - JPA provider/ORM Framework to deal with database access
-  - Speed and being able to work with multiple databases
-  - Easy to scale whatever software you are writing to bigger and smaller architectures and numbers of users
-  - Slow to restart, but use with AWS should be better
 * React
-  - Simpler to grasp than Angular, uses JSX = HTML+JS
-  - Reusability
-  - One way data-binding, so easier to debug
-  - Updates rendering of only updated elements instead of refreshing
-  - Easy to test with Jest and Cypress/Puppeteer
 * Docker
 * AWS
 
@@ -73,34 +59,28 @@ Pokemon GO Social is to be a React powered Social Networking site for the Pokemo
     ├── Search
     └── Add friend
 ```
-### Screen Transition Diagram
-![](./img/wfInitial.jpg)
 
 ## Functions
-
-[See Functions sheet](https://docs.google.com/spreadsheets/d/13vwGG_Eqmm5E5HBAxvim8XW88R8xTYjDdPpDuEH5pXU/edit?usp=sharing) **for Security/Logging/Testing related descriptions for each function**
-
-#### Verbose Description
-1. [SignUp](#SignUp) ---- LATER
-2. [**Login**](#Login)
-    1. [**Logout**](#Logout)
-    2. [**PokeNews**](#pokenews)
-        1. [**Make a post**](#makepost)    
-        2. [**View all posts**](#viewposts)   
-    2. [**Trainer Profile**](#profile)   
-        2. [**Edit Trainer Profile**](#editprofile)   
-        2. [View self posts](#wall)    ---- LATER
-        2. [View friend list](#friendlist)    ---- LATER
-        2. [View friend profile](#friendprofile)   ---- LATER
-    2. [Messaging](#messaging) ---- LATER
-        2. [View friend chat](#chat)    ---- LATER
-        2. [Send message](#sendmsg)    ---- LATER
-    2. [**Search**](#search)
-    2. [Add friend](#addfriend)     ---- LATER
+1. [SignUp](#SignUp)
+2. [Login](#Login)
+    1. [Logout](#Logout)
+    2. [PokeNews](#pokenews)
+        1. [Make a post](#makepost)    
+        2. [View all posts](#viewposts)   
+    2. [Trainer Profile](#profile)   
+        2. [Edit Trainer Profile](#editprofile)   
+        2. [View self posts](#wall)   
+        2. [View friend list](#friendlist)   
+        2. [View friend profile](#friendprofile)  
+    2. [Messaging](#messaging)
+        2. [View friend chat](#chat)   
+        2. [Send message](#sendmsg)   
+    2. [Search](#search)
+    2. [Add friend](#addfriend)    
 
 
 <a name="SignUp"></a>
-#### SignUp ---- LATER
+#### SignUp
 Input unique Pokemon GO ID (for now, any 6 digit unique number - later the actual 12 like in game) and EmailID and press "Register" button → if it is not registered already, then store locally and move to "Credentials" page. Generate:
 - Trainer Alias
 - Password
@@ -110,17 +90,14 @@ Input unique Pokemon GO ID (for now, any 6 digit unique number - later the actua
 If already stored, then display "Already registered" and a Go Back button to go to the PoGoS homepage.
 
 <a name="Login"></a>
-![](./img/wfLogin.jpg)
 #### Login
 Input valid Trainer ID and pre-generated password and press "Login" button → if it matches to DB data, then move "PokeNews" page. If Not, then display "TrainerID or Password is invalid"
- [Decide utf and password hashfunction security]
 
 <a name="Logout"></a>
 #### Logout
-Press logout button in navigation bar of "PokeNews", "Trainer Profile" or the "Messaging" page and move to PoGoS Login page.
+Press logout button in navigation bar of "PokeNews", "Trainer Profile" or the "Messaging" page and move to PoGoS homepage.
 
 <a name="pokenews"></a>
-![](./img/wfPokenews.jpg)
 <a name="makepost"></a>
 #### PokeNews → Make a post
 Navigate to the PokeNews page from the navigation bar available on the "PokeNews", "Trainer Profile" and "Messaging" Pages.
@@ -136,9 +113,8 @@ Navigate to the PokeNews page from the navigation bar available on the "PokeNews
 Posts populated on the PokeNews page under the posting block chronologically from most recent to old posts. Post component is replicated to show n number of posts. Press [Older] or [Newer] to view other n post lists.
 
 <a name="profile"></a>
-![](./img/wfProfile.jpg)
 <a name="editprofile"></a>
-#### Trainer Profile → View/Edit Trainer Profile
+#### Trainer Profile → Edit Trainer Profile
 Navigate to the "Trainer Profile" page from the navigation bar available on the "PokeNews", "Trainer Profile" and "Messaging" Pages.
 1. Press the "Edit" button to go to the "profile edit form" page.
 2. The Profile has the information:
@@ -157,11 +133,11 @@ Navigate to the "Trainer Profile" page from the navigation bar available on the 
 3. After making changes, press "Submit" button → move to "Trainer Profile" page
 
 <a name="wall"></a>
-#### Trainer Profile → View self posts ---- LATER
+#### Trainer Profile → View self posts
 Posts associated with the trainer are populated on the "Trainer Profile" page, in the posting section. Arranged chronologically from most recent to old posts. Post component is replicated to show n number of posts. Press [Older] or [Newer] to view other n post lists. Post component is exactly the same as the one used in PokeNews.
 
 <a name="friendlist"></a>
-#### Trainer Profile → View friend list ---- LATER
+#### Trainer Profile → View friend list
 1. Press "Friends" on top of the "Trainer Profile" page and move to the "Friend List" page.
 2. Friends of the user are displayed here in alphabetical order, along with their basic information:
       - Trainer Alias
@@ -173,84 +149,47 @@ Posts associated with the trainer are populated on the "Trainer Profile" page, i
 
 <a name="messaging"></a>
 <a name="chat"></a>
-#### Messaging → View friend chat ---- LATER
+#### Messaging → View friend chat
 Navigate to the "Messaging" page from the navigation bar available on the "PokeNews", "Trainer Profile" and "Messaging" Pages. Messaging page contains a list of friend chats referenced chronologically by the last message. There is also a search bar to start a new chat.
 1. Press on chat button after selecting the friend's name from either history or the friend search
 2. Move to friend chat page, which is populated with the chat messages in chronological order and color coded for the person who sent the message.
 3. The chat page also has a back button to go back to the "Messaging page" and a send button to send a new text message.
 
 <a name="sendmsg"></a>
-#### Messaging → Send message ---- LATER
+#### Messaging → Send message
 1. Type in the text in the text box.
 2. Hit send -> refresh friend chat page to incorporate the latest message.
 3. Hit back -> go back to the "Messaging" page, with refreshed order if new message sent.
 
 <a name="search"></a>
 ### Search
-![](./img/wfSearch.jpg)
-Search for a friend's name on the Search page via trainer codes or trainer alias or by a Pokemon's name for a link to the Pokemon's details. If *Snorlax* is given as the search query, the search should return the link to the pokemon *Snorlax* and any trainer aliases which start with the string *Snorlax-*, such as *Snorlax_thin*.  
-- Implement "add friend" from search results later
+Search for a friend's name on the navigation bar via trainer codes or trainer alias in the trainers DB.
 
 <a name="addfriend"></a>
-### Add friend ---- LATER
+### Add friend
 Click add friend button on any new profile. New friends may have less information on the profile.
 
 
 ## DB Schema
-Make actual DB schema using draw.io later
-
-Trainer information, Trainer Posts, Trainer Friends are stored in DB
-
-trainer_cred: Only login info (set after signup)
-access: Holds session token and login information for security and logging purposes
-trainer_info_basic: Only basic information which is common to most views
-trainer_profile: All Pokemon GO related information regarding trainer
-friends: Existing relationships between trainers (Later implement messaging)
-posts: Holds post information to populate PokeNews
-
-![](./img/PoGoDB_init.jpg)
+Update DB Schema. For draft, using messengerDB -
+![](./img/PoGoDB.png)
 
 
 ## Infrastructure
-
+Not sure. Have to work on this.
 
 ## Security
-SpringBoot and React Security checklist (https://snyk.io/blog/spring-boot-security-best-practices/)
-- Use HTTPS Let's Encrypt TLS certificates
-- Sql injection - Hibernate + Placeholders
-- Check dependency reliability
-- XSS
-  - Enable content security policy headers in Spring
-  - use a meta http-equiv="Content-Security-Policy" tag in your HTML page
-  - Use escapes
-- CSRF - Spring Security enables CSRF Security by default. To work with React, you will need to configure the CookieCsrfTokenRepository so JavaScript can read the cookie
-- Use spring vault for admin credentials if not local
-- Use password hashing: PasswordEncoder in Spring. Also use salting
-- Cookie: Attach HTTP-Only (+ Secure if using SSL/TLS) attribute to cookies that contain important information
-- Use the latest modules, libraries, middleware, etc. as much as possible,
-and do not use versions that release critical vulnerabilities.
-- Don't expose framework information in meta tags/HTTP responses
-
-Ask Saburi-san for more security pointers
+- Sql injection - Hibernate + Prepared statements
+- XSS - React has some sort of XSS protection
+- DOS - Not sure, have to check.
 
 ## Monitoring & Logging
 - AWS cloudwatch already has some monitoring and logging features.
 - Using a client-side logging library sending JSON data to maintain a data structure that can easily be sorted and organized.
 
-Logging- (Error/Events)
-Login attempts - user registered or not
-Signup - user exist
-Error in credentials
-Login/Logout success/failure log
-Post error log (post content/ lengths/ formats)
-Forbidden requests
-
-
-
 ## Test
-Check custom unit tests in spreadsheet link above
-
 - React - Jest + Enzyme for unit testing
 - Spring - Have to check out DataJPATest, WebMvcTest
 - Integration Testing with SpringBootTest
-- E2E - Full UI Automatic tests using Cypress
+- E2E - Full UI Automatic tests
+Search login tests
