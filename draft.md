@@ -81,7 +81,7 @@ Pokemon GO Social is to be a React powered Social Networking site for the Pokemo
 [See Functions sheet](https://docs.google.com/spreadsheets/d/13vwGG_Eqmm5E5HBAxvim8XW88R8xTYjDdPpDuEH5pXU/edit?usp=sharing) **for Security/Logging/Testing related descriptions for each function**
 
 #### Verbose Description
-1. [SignUp](#SignUp) ---- LATER
+1. [SignUp](#SignUp) ---- LATER   
 2. [**Login**](#Login)
     1. [**Logout**](#Logout)
     2. [**PokeNews**](#pokenews)
@@ -89,14 +89,14 @@ Pokemon GO Social is to be a React powered Social Networking site for the Pokemo
         2. [**View all posts**](#viewposts)   
     2. [**Trainer Profile**](#profile)   
         2. [**Edit Trainer Profile**](#editprofile)   
-        2. [View self posts](#wall)    ---- LATER
-        2. [View friend list](#friendlist)    ---- LATER
-        2. [View friend profile](#friendprofile)   ---- LATER
-    2. [Messaging](#messaging) ---- LATER
-        2. [View friend chat](#chat)    ---- LATER
-        2. [Send message](#sendmsg)    ---- LATER
+        2. [View self posts](#wall)    ---- LATER    
+        2. [View friend list](#friendlist)    ---- LATER    
+        2. [View friend profile](#friendprofile)   ---- LATER    
+    2. [Messaging](#messaging) ---- LATER     
+        2. [View friend chat](#chat)    ---- LATER     
+        2. [Send message](#sendmsg)    ---- LATER     
     2. [**Search**](#search)
-    2. [Add friend](#addfriend)     ---- LATER
+    2. [Add friend](#addfriend)     ---- LATER     
 
 
 <a name="SignUp"></a>
@@ -212,6 +212,10 @@ posts: Holds post information to populate PokeNews
 
 
 ## Infrastructure
+![](./img/wfInfra.jpg)
+
+
+
 
 
 ## Security
