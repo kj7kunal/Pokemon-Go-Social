@@ -20,3 +20,12 @@
 .App-link {
   color: #09d3ac;
 }
+
+.navbar-brand {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+.navbar-brand>img {
+  padding: 3px ;
+}
