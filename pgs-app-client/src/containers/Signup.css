@@ -1,11 +1,11 @@
 @media all and (min-width: 480px) {
-  .Login {
-    padding: 60px 0;
+  .Signup {
+    padding: 10px 0;
   }
 
-  .Login form {
+  .Signup form {
     margin: 0 auto;
-    max-width: 320px;
+    max-width: 500px;
     text-align: left;
   }
 
