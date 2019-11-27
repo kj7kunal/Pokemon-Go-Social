@@ -12,7 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name = "trainer_cred")
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
+@JsonIgnoreProperties(value = {"createdAt"}, allowGetters = true)
 public class Trainer {
 
     // Hibernate Search needs to store the entity identifier in the index for
@@ -21,16 +21,18 @@ public class Trainer {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     @Column(unique = true)
-    private String trainerID;
+    private String trainerId;
+
     @NotNull
     private String password;
 
     @NotNull
     @Email
     @Column(unique = true)
-    private String emailID;
+    private String emailId;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,27 +41,27 @@ public class Trainer {
 
 //    public Trainer() {}
 //
-//    public Trainer(String trainerID, String password) {
-//        this.trainerID = trainerID;
+//    public Trainer(String trainerId, String password) {
+//        this.trainerId = trainerId;
 //        this.password = password;
 //    }
 //
-//    public Trainer(String trainerID, String password, String emailID) {
-//        this.trainerID = trainerID;
+//    public Trainer(String trainerId, String password, String emailId) {
+//        this.trainerId = trainerId;
 //        this.password = password;
-//        this.emailID = emailID;
+//        this.emailId = emailId;
 //    }
 
     public Long getId() {
         return id;
     }
 
-    public String getTrainerID() {
-        return trainerID;
+    public String getTrainerId() {
+        return trainerId;
     }
 
-    public void setTrainerID(String trainerID) {
-        this.trainerID = trainerID;
+    public void setTrainerId(String trainerId) {
+        this.trainerId = trainerId;
     }
 
     public String getPassword() {
@@ -70,12 +72,12 @@ public class Trainer {
         this.password = password;
     }
 
-    public String getEmailID() {
-        return emailID;
+    public String getEmailId() {
+        return emailId;
     }
 
-    public void setEmailID(String emailID) {
-        this.emailID = emailID;
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
     }
 
     public Date getCreatedAt() {

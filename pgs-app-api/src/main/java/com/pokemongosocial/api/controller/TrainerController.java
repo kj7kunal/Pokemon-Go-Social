@@ -22,10 +22,10 @@ public class TrainerController {
         return trainerRepository.findAll();
     }
 
-    @GetMapping("/trainers/{trainerID}")
-    public Trainer getTrainer(@PathVariable("trainerID") String trainerID) {
-        return trainerRepository.findByTrainerID(trainerID)
-                .orElseThrow(() -> new ResourceNotFoundException("Trainer", "ID", trainerID));
+    @GetMapping("/trainers/{trainerId}")
+    public Trainer getTrainer(@PathVariable("trainerId") String trainerId) {
+        return trainerRepository.findByTrainerId(trainerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Trainer", "Id", trainerId));
     }
 
     private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
@@ -36,20 +36,20 @@ public class TrainerController {
         return trainerRepository.save(trainer);
     }
 
-    @PutMapping("/trainers/{trainerID}")
-    public Trainer updateTrainer(@PathVariable String trainerID, @Valid @RequestBody Trainer trainerDetails) {
-        return trainerRepository.findByTrainerID(trainerID).map(trainer -> {
-            trainer.setEmailID(trainerDetails.getEmailID());
+    @PutMapping("/trainers/{trainerId}")
+    public Trainer updateTrainer(@PathVariable String trainerId, @Valid @RequestBody Trainer trainerDetails) {
+        return trainerRepository.findByTrainerId(trainerId).map(trainer -> {
+            trainer.setEmailId(trainerDetails.getEmailId());
             return trainerRepository.save(trainer);
-        }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "ID", trainerID));
+        }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "Id", trainerId));
     }
 
-    @DeleteMapping("/trainers/{trainerID}")
-    public ResponseEntity<?> deleteTrainer(@PathVariable String trainerID) {
-        return trainerRepository.findByTrainerID(trainerID).map(trainer -> {
+    @DeleteMapping("/trainers/{trainerId}")
+    public ResponseEntity<?> deleteTrainer(@PathVariable String trainerId) {
+        return trainerRepository.findByTrainerId(trainerId).map(trainer -> {
             trainerRepository.delete(trainer);
             return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "ID", trainerID));
+        }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "Id", trainerId));
     }
 
 }

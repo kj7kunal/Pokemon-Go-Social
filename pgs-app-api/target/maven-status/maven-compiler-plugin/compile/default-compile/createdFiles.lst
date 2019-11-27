@@ -1,4 +1,0 @@
-com/pokemongosocial/api/entity/Trainer.class
-com/pokemongosocial/api/repository/TrainerRepository.class
-com/pokemongosocial/api/controller/TrainerController.class
-com/pokemongosocial/api/exception/ResourceNotFoundException.class

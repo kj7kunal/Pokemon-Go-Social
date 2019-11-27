@@ -8,9 +8,15 @@ node_modules
 *.iws
 *.iml
 *.ipr
-
+.metadata
+.project
+.recommenders
+.settings
+.springBeans
+target
 
 # misc
 .DS_Store
 .env
+.sass-cache
 npm-debug.log
