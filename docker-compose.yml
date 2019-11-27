@@ -1,0 +1,35 @@
+version: '3'
+services:
+  pogos-mysql:
+    image: mysql:latest   #default
+    container_name: pogos-mysql   #container name
+    restart: always
+    environment:
+      MYSQL_ENDPOINT: 'localhost'
+      MYSQL_DATABASE: 'pogosDB'
+      MYSQL_USER: 'root'    # default
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      TZ :  ' Asia / Tokyo'
+    ports:
+      - "3306:3306"  #A:B => MySQL running in container on port B is mapped to the localhost on A
+    expose:
+    # Opens port 3306 on the container
+    - '3306'
+    volumes:
+      - pogosDV:/var/lib/mysql
+
+volumes:
+  pogosDV:
+
+
+  # api:
+  #   container_name: pogos-api
+  #   restart: always
+  #   build:
+  #     context: ./pgs-app-api
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - mysql
+  #   ports:
+  #     - "9000:9000"

@@ -3,7 +3,12 @@ node_modules
 
 # testing
 
-# production
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
 
 # misc
 .DS_Store
