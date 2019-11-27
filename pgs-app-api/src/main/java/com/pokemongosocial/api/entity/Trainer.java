@@ -5,12 +5,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "trainer_cred",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"trainerID", "emailID"})})
+@Table(name = "trainer_cred")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class Trainer {
@@ -19,7 +19,7 @@ public class Trainer {
     // each entity. By default, it will use for this purpose the field marked
     // with Id.
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @NotNull
     @Column(unique = true)
@@ -27,6 +27,8 @@ public class Trainer {
     @NotNull
     private String password;
 
+    @NotNull
+    @Email
     @Column(unique = true)
     private String emailID;
 
