@@ -2,13 +2,14 @@ package com.pokemongosocial.api.controller;
 
 
 import com.pokemongosocial.api.entity.Trainer;
+import com.pokemongosocial.api.entity.TrainerProfile;
 import com.pokemongosocial.api.exception.ResourceNotFoundException;
+import com.pokemongosocial.api.repository.TrainerProfileRepository;
 import com.pokemongosocial.api.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import java.util.List;
 public class TrainerController {
     @Autowired
     TrainerRepository trainerRepository;
+    TrainerProfileRepository trainerProfileRepository;
 
     @GetMapping("/trainers")
     public List<Trainer> getAllTrainers() {
@@ -32,8 +34,10 @@ public class TrainerController {
 
     private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
     // Create a new trainer
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/trainers")
     public Trainer createTrainer(@Valid @RequestBody Trainer trainer) {
+        System.out.println(trainer);
         trainer.setPassword("{kaias}" + passEncoder.encode(trainer.getPassword()));
         return trainerRepository.save(trainer);
     }
@@ -43,6 +47,7 @@ public class TrainerController {
         return trainerRepository.findById(trainerId).map(trainer -> {
             trainer.setAlias(trainerDetails.getAlias());
             trainer.setEmailId(trainerDetails.getEmailId());
+//            trainer.setTrainerProfile(trainerDetails.getTrainerProfile());
             return trainerRepository.save(trainer);
         }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "Id", trainerId));
     }

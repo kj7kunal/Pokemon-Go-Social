@@ -20,7 +20,7 @@ public class MainAppClass {
     @PostConstruct
     public void init() {
         // Setting Spring Boot SetTimeZone
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tokyo"));
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
 }

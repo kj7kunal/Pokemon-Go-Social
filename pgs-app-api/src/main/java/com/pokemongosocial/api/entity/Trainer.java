@@ -1,6 +1,7 @@
 package com.pokemongosocial.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,14 +16,15 @@ import java.util.Date;
 @Table(name = "trainer_cred")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt"}, allowGetters = true)
-@SequenceGenerator(name="trainerSeq", initialValue=1000001)
+@SequenceGenerator(name = "trainerSeq", initialValue = 1000001)
 public class Trainer implements Serializable {
 
     // Hibernate Search needs to store the entity identifier in the index for
     // each entity. By default, it will use for this purpose the field marked
     // with Id.
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "trainerSeq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trainerSeq")
+    @Column(name = "id")
     private Long id;
 
     @NotNull
@@ -32,9 +34,8 @@ public class Trainer implements Serializable {
     @NotNull
     private String password;
 
-    @NotNull
     @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, updatable = false)
     private String emailId;
 
     @Column(nullable = false, updatable = false)
@@ -45,7 +46,12 @@ public class Trainer implements Serializable {
 //    @OneToMany(mappedBy = "trainer")
 //    private List<Post> posts = new ArrayList<Post>();
 
-    public Trainer() {}
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "trainer", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private TrainerProfile trainerProfile;
+
+    public Trainer() {
+    }
 
     public Long getId() {
         return id;
@@ -56,7 +62,7 @@ public class Trainer implements Serializable {
     }
 
     public void setAlias(String alias) {
-            this.alias = alias;
+        this.alias = alias;
     }
 
     public String getPassword() {
@@ -81,5 +87,20 @@ public class Trainer implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public TrainerProfile getTrainerProfile() {
+        return trainerProfile;
+    }
+
+    public void setTrainerProfile(TrainerProfile trainerProfile) {
+        if (trainerProfile == null) {
+            if (this.trainerProfile != null) {
+                this.trainerProfile.setTrainer(null);
+            }
+        } else {
+            trainerProfile.setTrainer(this);
+        }
+        this.trainerProfile = trainerProfile;
     }
 }
