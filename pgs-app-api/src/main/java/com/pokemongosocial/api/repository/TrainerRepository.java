@@ -8,7 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, Long> {
-
-    Optional<Trainer> findByTrainerId(String trainerId);
-//    boolean isValidTrainerId (String trainerId);
 }

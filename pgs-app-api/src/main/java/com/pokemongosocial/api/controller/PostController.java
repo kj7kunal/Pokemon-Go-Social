@@ -27,37 +27,40 @@ public class PostController {
     }
 
     @GetMapping("/trainers/{trainerId}/posts")
-    public List<Post> getAllPostsByUserId(@PathVariable (value = "trainerId") String trainerId) {
-        return postRepository.findAllByPosterId(trainerId)
+    public List<Post> getAllPostsByTrainerId(@PathVariable(value = "trainerId") Long trainerId) {
+        return postRepository.findByTrainerId(trainerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "trainerId", trainerId));
     }
 
     @PostMapping("/trainers/{trainerId}/posts")
-    public Post createPost(@PathVariable(value = "trainerId") String trainerId,
+    public Post createPost(@PathVariable(value = "trainerId") Long trainerId,
                            @Valid @RequestBody Post post) {
-        post.setPosterId(trainerId);
-        return postRepository.save(post);
+        return trainerRepository.findById(trainerId).map(trainer -> {
+            post.setTrainer(trainer);
+            return postRepository.save(post);
+        }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "TrainerId", trainerId));
     }
 
     @PutMapping("/trainers/{trainerId}/posts/{postId}")
-    public Post updatePost(@PathVariable (value = "trainerId") String trainerId,
+    public Post updatePost(@PathVariable (value = "trainerId") Long trainerId,
                            @PathVariable (value = "postId") Long postId,
                            @Valid @RequestBody Post postRequest) {
-        // TODO: Add check for trainerId existence
-        return postRepository.findById(postId).map(post -> {
-            post.setContent(postRequest.getContent());
-            return postRepository.save(post);
-        }).orElseThrow(() -> new ResourceNotFoundException("Post", "PostId", postId));
+        return trainerRepository.findById(trainerId).map(trainer ->
+                postRepository.findByIdAndTrainerId(postId,trainerId).map(post -> {
+                    post.setContent(postRequest.getContent());
+                    return postRepository.save(post);
+                }).orElseThrow(() -> new ResourceNotFoundException("Post", "PostId", postId))
+        ).orElseThrow(() -> new ResourceNotFoundException("Trainer", "TrainerId", trainerId));
     }
 
     @DeleteMapping("/users/{trainerId}/posts/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable (value = "trainerId") String trainerId,
+    public ResponseEntity<?> deletePost(@PathVariable (value = "trainerId") Long trainerId,
                                         @PathVariable (value = "postId") Long postId) {
-        // TODO: Add check for trainerId existence
-        return postRepository.findById(postId).map(post -> {
-            postRepository.delete(post);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("Post", "PostId", postId));
+        return trainerRepository.findById(trainerId).map(trainer ->
+                postRepository.findByIdAndTrainerId(postId,trainerId).map(post -> {
+                    postRepository.delete(post);
+                    return ResponseEntity.ok().build();
+                }).orElseThrow(() -> new ResourceNotFoundException("Post", "PostId", postId))
+        ).orElseThrow(() -> new ResourceNotFoundException("Trainer", "TrainerId", trainerId));
     }
-
 }

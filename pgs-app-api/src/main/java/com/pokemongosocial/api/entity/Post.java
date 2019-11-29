@@ -1,27 +1,37 @@
 package com.pokemongosocial.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "posts")
+@Table(name = "trainer_posts")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"},allowGetters = true)
-public class Post {
+public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private String posterId;
+//    @NotNull
+//    private String posterId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "poster_id", nullable = false)   //foreign key referencing primary key
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Trainer trainer;
 
     @NotNull
+    @Lob
     private String content;
 
     @Column(nullable = false, updatable = false)
@@ -38,11 +48,7 @@ public class Post {
         return id;
     }
 
-    public String getPosterId() {
-        return posterId;
-    }
-
-    public void setPosterId(String posterId) { this.posterId = posterId; }
+    public void setTrainer(Trainer trainer) { this.trainer = trainer; }
 
     public String getContent() { return content; }
 

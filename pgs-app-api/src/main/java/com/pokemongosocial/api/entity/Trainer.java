@@ -7,24 +7,27 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "trainer_cred")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt"}, allowGetters = true)
-public class Trainer {
+@SequenceGenerator(name="trainerSeq", initialValue=1000001)
+public class Trainer implements Serializable {
 
     // Hibernate Search needs to store the entity identifier in the index for
     // each entity. By default, it will use for this purpose the field marked
     // with Id.
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "trainerSeq")
     private Long id;
 
     @NotNull
-    @Column(unique = true)
-    private String trainerId;
+    @Size(min = 3, max = 30)
+    private String alias;
 
     @NotNull
     private String password;
@@ -39,29 +42,21 @@ public class Trainer {
     @CreatedDate
     private Date createdAt;
 
-//    public Trainer() {}
-//
-//    public Trainer(String trainerId, String password) {
-//        this.trainerId = trainerId;
-//        this.password = password;
-//    }
-//
-//    public Trainer(String trainerId, String password, String emailId) {
-//        this.trainerId = trainerId;
-//        this.password = password;
-//        this.emailId = emailId;
-//    }
+//    @OneToMany(mappedBy = "trainer")
+//    private List<Post> posts = new ArrayList<Post>();
+
+    public Trainer() {}
 
     public Long getId() {
         return id;
     }
 
-    public String getTrainerId() {
-        return trainerId;
+    public String getAlias() {
+        return alias;
     }
 
-    public void setTrainerId(String trainerId) {
-        this.trainerId = trainerId;
+    public void setAlias(String alias) {
+            this.alias = alias;
     }
 
     public String getPassword() {

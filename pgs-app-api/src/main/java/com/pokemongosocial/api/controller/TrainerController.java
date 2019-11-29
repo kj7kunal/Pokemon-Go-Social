@@ -5,6 +5,8 @@ import com.pokemongosocial.api.entity.Trainer;
 import com.pokemongosocial.api.exception.ResourceNotFoundException;
 import com.pokemongosocial.api.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +25,8 @@ public class TrainerController {
     }
 
     @GetMapping("/trainers/{trainerId}")
-    public Trainer getTrainer(@PathVariable("trainerId") String trainerId) {
-        return trainerRepository.findByTrainerId(trainerId)
+    public Trainer getTrainer(@PathVariable("trainerId") Long trainerId) {
+        return trainerRepository.findById(trainerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trainer", "Id", trainerId));
     }
 
@@ -37,16 +39,17 @@ public class TrainerController {
     }
 
     @PutMapping("/trainers/{trainerId}")
-    public Trainer updateTrainer(@PathVariable String trainerId, @Valid @RequestBody Trainer trainerDetails) {
-        return trainerRepository.findByTrainerId(trainerId).map(trainer -> {
+    public Trainer updateTrainer(@PathVariable Long trainerId, @Valid @RequestBody Trainer trainerDetails) {
+        return trainerRepository.findById(trainerId).map(trainer -> {
+            trainer.setAlias(trainerDetails.getAlias());
             trainer.setEmailId(trainerDetails.getEmailId());
             return trainerRepository.save(trainer);
         }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "Id", trainerId));
     }
 
     @DeleteMapping("/trainers/{trainerId}")
-    public ResponseEntity<?> deleteTrainer(@PathVariable String trainerId) {
-        return trainerRepository.findByTrainerId(trainerId).map(trainer -> {
+    public ResponseEntity<?> deleteTrainer(@PathVariable Long trainerId) {
+        return trainerRepository.findById(trainerId).map(trainer -> {
             trainerRepository.delete(trainer);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "Id", trainerId));
