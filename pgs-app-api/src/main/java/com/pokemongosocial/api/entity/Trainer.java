@@ -1,5 +1,7 @@
 package com.pokemongosocial.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,6 +13,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "trainer_cred")
@@ -27,8 +31,8 @@ public class Trainer implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
     @Size(min = 3, max = 30)
+    @Column(unique = true, nullable = false)
     private String alias;
 
     @NotNull
@@ -49,6 +53,14 @@ public class Trainer implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "trainer", fetch = FetchType.LAZY)
     @JsonManagedReference
     private TrainerProfile trainerProfile;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinTable(name = "trainer_roles",
+            joinColumns = @JoinColumn(name = "trainer_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnore
+    private Set<Role> roles = new HashSet<>();
 
     public Trainer() {
     }
@@ -102,5 +114,13 @@ public class Trainer implements Serializable {
             trainerProfile.setTrainer(this);
         }
         this.trainerProfile = trainerProfile;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
