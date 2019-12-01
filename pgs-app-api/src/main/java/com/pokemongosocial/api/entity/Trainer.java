@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -63,6 +64,12 @@ public class Trainer implements Serializable {
     private Set<Role> roles = new HashSet<>();
 
     public Trainer() {
+    }
+
+    public Trainer(String alias, String email, String password) {
+        this.alias = alias;
+        this.emailId = email;
+        this.password = password;
     }
 
     public Long getId() {

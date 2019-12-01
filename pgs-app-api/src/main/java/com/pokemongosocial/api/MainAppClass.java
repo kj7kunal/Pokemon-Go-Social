@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication()
 @EnableJpaAuditing
 public class MainAppClass {
     public static void main(String[] args) {

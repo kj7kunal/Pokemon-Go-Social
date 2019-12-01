@@ -5,7 +5,6 @@ import com.pokemongosocial.api.entity.Team;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class SignUpRequest {
     @NotBlank
@@ -19,14 +18,11 @@ public class SignUpRequest {
     @NotBlank
     private String password;
 
-    @NotBlank
-    private LocalDate dob;
-
-    @NotBlank
-    private Team team;
-
-    @NotBlank
-    private Gender gender;
+//    private LocalDate dob;
+//
+//    private Team team;
+//
+//    private Gender gender;
 
     public String getAlias() {
         return alias;
@@ -52,27 +48,27 @@ public class SignUpRequest {
         this.password = password;
     }
 
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
+//    public LocalDate getDob() {
+//        return dob;
+//    }
+//
+//    public void setDob(LocalDate dob) {
+//        this.dob = dob;
+//    }
+//
+//    public Gender getGender() {
+//        return gender;
+//    }
+//
+//    public void setGender(Gender gender) {
+//        this.gender = gender;
+//    }
+//
+//    public Team getTeam() {
+//        return team;
+//    }
+//
+//    public void setTeam(Team team) {
+//        this.team = team;
+//    }
 }

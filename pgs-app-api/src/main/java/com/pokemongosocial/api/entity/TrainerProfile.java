@@ -35,7 +35,6 @@ public class TrainerProfile implements Serializable {
     @Lob
     private String bio;
 
-    @NotNull
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate dob;
 
@@ -43,11 +42,13 @@ public class TrainerProfile implements Serializable {
 //    private byte[] avatar;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 10, nullable = false, updatable = false)
+    @Column(columnDefinition="varchar(10) default 'MALE'",
+            updatable = false)
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, updatable = false)
+    @Column(columnDefinition="varchar(30) default 'MYSTIC'",
+            updatable = false)
     private Team team;
 
     @Size(max = 40)

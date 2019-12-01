@@ -37,7 +37,6 @@ public class TrainerController {
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/trainers")
     public Trainer createTrainer(@Valid @RequestBody Trainer trainer) {
-        System.out.println(trainer);
         trainer.setPassword("{kaias}" + passEncoder.encode(trainer.getPassword()));
         return trainerRepository.save(trainer);
     }

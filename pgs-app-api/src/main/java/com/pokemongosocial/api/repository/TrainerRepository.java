@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, Long> {
     Optional<Trainer> findByAlias(String alias);
+    Boolean existsByAlias(String alias);
+    Boolean existsByEmailId(String emailId);
 }
