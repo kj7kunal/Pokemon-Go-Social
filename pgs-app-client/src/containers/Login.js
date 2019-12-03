@@ -9,68 +9,61 @@ class Login extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      alias: '',
-      password: '',
-      error: '',
+      alias: {value:''},
+      email: {value:''},
+      password: {value:''},
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleAliasChange = this.handleAliasChange.bind(this);
+    this.handlePassChange = this.handlePassChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.dismissError = this.dismissError.bind(this);
   }
 
   validateForm() {
     return this.state.email.length > 0 && this.state.password.length > 0;
   }
 
-
-  dismissError() {
-    this.setState({ error: '' });
-  }
-
-  handleChange(event) {
+  handleAliasChange(event, validationFun) {
+    const target = event.target;
+    const inputValue = target.value;
     this.setState({
-      Alias: event.target.value,
+      alias: inputValue,
+      ...validationFun(inputValue)
     });
-  };
-
-  handleSubmit(event) {
-
-    this.setState({ isLoading: true });
-
-    if (!this.state.alias) {
-      return this.setState({ error: 'Alias is required' });
-    }
-
-    if (!this.state.password) {
-      return this.setState({ error: 'Password is required' });
-    }
-
-
-    return this.setState({ error: '' });
+  }
+  handlePassChange(event, validationFun) {
+    const target = event.target;
+    const inputValue = target.value;
+    this.setState({
+      password: inputValue,
+      ...validationFun(inputValue)
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({ isLoading: true });
-    this.props.form.validateFields((err, values) => {
-        if (!err) {
-            const loginRequest = Object.assign({}, values);
-            login(loginRequest)
-            .then(response => {
-                localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-                this.props.onLogin();
-            }).catch(error => {
-                if(error.status === 401) {
-                    console.log('Your Username or Password is incorrect. Please try again!');
-                } else {
-                    console.log('Sorry! Something went wrong. Please try again!');
-                }
-                this.setState({ isLoading: false });
-            });
+
+    const loginRequest = {
+      alias: this.state.alias,
+      password: this.state.password
+    };
+    console.log(loginRequest);
+
+    login(loginRequest)
+    .then(response => {
+        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+        // this.props.onLogin();
+        console.log("successfully logged in.")
+        this.props.history.push("/");
+    }).catch(error => {
+        if(error.status === 401) {
+            console.log('Your Username or Password is incorrect. Please try again!');
+        } else {
+            console.log(error.message);
         }
+        this.setState({ isLoading: false });
     });
-}
+  }
 
 
   render(){
@@ -79,12 +72,17 @@ class Login extends React.Component {
       <div className="Login">
         <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="alias" bsSize="large">
-            <ControlLabel>Alias</ControlLabel>
+            <ControlLabel>Trainer Alias</ControlLabel>
             <FormControl
               autoFocus
-              type="alias"
+              type="text"
+              name="alias"
+              placeholder="Your registered trainer name"
+              validatestatus={this.state.alias.validatestatus}
+              help={this.state.alias.errorMsg}
               value={this.state.alias}
-              onChange={this.handleChange}
+              required={true}
+              onChange={(event) => this.handleAliasChange(event, this.validateAlias)}
             />
           </FormGroup>
           <FormGroup controlId="password" bsSize="large">
@@ -92,24 +90,62 @@ class Login extends React.Component {
             <FormControl
               autoFocus
               type="password"
+              name="password"
+              autoComplete="off"
+              placeholder="Your password (8<chars<20)"
+              validatestatus={this.state.password.validatestatus}
+              help={this.state.password.errorMsg}
               value={this.state.password}
-              onChange={this.handleChange}
+              required={true}
+              onChange={(event) => this.handlePassChange(event, this.validatePassword)}
             />
           </FormGroup>
           <Button block type="submit">
             Login
           </Button>
-          {
-            this.state.error &&
-            <h3 data-test="error" onClick={this.dismissError}>
-              <button onClick={this.dismissError}>✖</button>
-              {this.state.error}
-            </h3>
-          }
         </form>
       </div>
     )
   }
+
+  validateAlias = (alias) => {
+      if(!alias) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Alias is not enterred.)`
+          }
+      } else if (alias.length < 0) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Alias is not enterred.)`
+          }
+      } else {
+          return {
+              validatestatus: 'success',
+              errorMsg: null,
+            };
+      }
+  }
+
+  validatePassword = (password) => {
+      if(!password) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Password is not enterred.)`
+          }
+      } else if (password.length < 0) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Password is not enterred.)`
+          }
+      } else {
+          return {
+              validatestatus: 'success',
+              errorMsg: null,
+            };
+      }
+  }
 }
+
 
 export default Login;

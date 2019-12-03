@@ -9,12 +9,6 @@ import {
     PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH
 } from '../constants';
 
-{/* TODO:
-  1. change team and gender fields to dropdown list
-  2. add signup validation functionality
-  3. check validity of various form fields
-  3. maybe add a unique checker from database */}
-
 
 class Signup extends React.Component {
   constructor() {
@@ -35,23 +29,19 @@ class Signup extends React.Component {
     this.handleGChange = this.handleGChange.bind(this);
     this.handleTChange = this.handleTChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    console.log(this.state)
   }
 
 
   handleGChange(event){
     this.setState({ gender: this.inputG.value });
-      console.log(this.state);
   }
   handleTChange(event){
     this.setState({ team: this.inputT.value });
-      console.log(this.state);
   }
 
   handleAliasChange(event, validationFun) {
     const target = event.target;
     const inputValue = target.value;
-    console.log(this.state);
     this.setState({
       alias: inputValue,
       ...validationFun(inputValue)
@@ -60,7 +50,6 @@ class Signup extends React.Component {
   handleEmailChange(event, validationFun) {
     const target = event.target;
     const inputValue = target.value;
-    console.log(this.state);
     this.setState({
       email: inputValue,
       ...validationFun(inputValue)
@@ -69,7 +58,6 @@ class Signup extends React.Component {
   handlePassChange(event, validationFun) {
     const target = event.target;
     const inputValue = target.value;
-    console.log(this.state);
     this.setState({
       password: inputValue,
       ...validationFun(inputValue)
@@ -78,7 +66,6 @@ class Signup extends React.Component {
   handleCPassChange(event, validationFun) {
     const target = event.target;
     const inputValue = target.value;
-    console.log(this.state);
     this.setState({
       confirmpassword: inputValue,
       ...validationFun(inputValue)
@@ -139,8 +126,8 @@ class Signup extends React.Component {
                   help={this.state.alias.errorMsg}
                   value={this.state.alias}
                   onChange={(event) => this.handleAliasChange(event, this.validateAlias)}
-                  />
-                </FormGroup>
+                />
+              </FormGroup>
             </Col>
             <Col md={6}>
               <FormGroup controlId="email" bsSize="small">
@@ -155,7 +142,7 @@ class Signup extends React.Component {
                   help={this.state.email.errorMsg}
                   value={this.state.email}
                   onChange={(event) => this.handleEmailChange(event,this.validateEmail)}
-                  />
+                />
               </FormGroup>
             </Col>
           </Row>
@@ -231,8 +218,7 @@ class Signup extends React.Component {
             </Col>
           </Row>
 
-          <Button block type="submit"
-          >
+          <Button block type="submit">
             Register
           </Button>
         </form>
@@ -291,8 +277,8 @@ class Signup extends React.Component {
   }
 
   validateAliasAvailability() {
-      // First check for client side errors in username
-      const aliasValue = this.state.username;
+      // First check for client side errors in alias
+      const aliasValue = this.state.alias;
       const aliasValidation = this.validateAlias(aliasValue);
 
       if(aliasValidation.validatestatus === 'error') {
