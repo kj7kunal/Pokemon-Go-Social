@@ -2,7 +2,6 @@ package com.pokemongosocial.api.controller;
 
 
 import com.pokemongosocial.api.entity.Trainer;
-import com.pokemongosocial.api.entity.TrainerProfile;
 import com.pokemongosocial.api.exception.ResourceNotFoundException;
 import com.pokemongosocial.api.repository.TrainerProfileRepository;
 import com.pokemongosocial.api.repository.TrainerRepository;
@@ -45,7 +44,7 @@ public class TrainerController {
     public Trainer updateTrainer(@PathVariable Long trainerId, @Valid @RequestBody Trainer trainerDetails) {
         return trainerRepository.findById(trainerId).map(trainer -> {
             trainer.setAlias(trainerDetails.getAlias());
-            trainer.setEmailId(trainerDetails.getEmailId());
+            trainer.setEmail(trainerDetails.getEmail());
 //            trainer.setTrainerProfile(trainerDetails.getTrainerProfile());
             return trainerRepository.save(trainer);
         }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "Id", trainerId));

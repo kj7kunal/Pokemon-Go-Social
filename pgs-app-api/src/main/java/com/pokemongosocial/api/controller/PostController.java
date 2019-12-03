@@ -6,6 +6,7 @@ import com.pokemongosocial.api.repository.PostRepository;
 import com.pokemongosocial.api.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,12 +26,14 @@ public class PostController {
         return postRepository.findAll();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/trainers/{trainerId}/posts")
     public List<Post> getAllPostsByTrainerId(@PathVariable(value = "trainerId") Long trainerId) {
         return postRepository.findByTrainerId(trainerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "trainerId", trainerId));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/trainers/{trainerId}/posts")
     public Post createPost(@PathVariable(value = "trainerId") Long trainerId,
                            @Valid @RequestBody Post post) {
@@ -40,6 +43,7 @@ public class PostController {
         }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "TrainerId", trainerId));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/trainers/{trainerId}/posts/{postId}")
     public Post updatePost(@PathVariable (value = "trainerId") Long trainerId,
                            @PathVariable (value = "postId") Long postId,
@@ -52,6 +56,7 @@ public class PostController {
         ).orElseThrow(() -> new ResourceNotFoundException("Trainer", "TrainerId", trainerId));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/users/{trainerId}/posts/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable (value = "trainerId") Long trainerId,
                                         @PathVariable (value = "postId") Long postId) {

@@ -1,6 +1,5 @@
 package com.pokemongosocial.api.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -12,7 +11,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +39,7 @@ public class Trainer implements Serializable {
 
     @Email
     @Column(unique = true, nullable = false, updatable = false)
-    private String emailId;
+    private String email;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -68,7 +66,7 @@ public class Trainer implements Serializable {
 
     public Trainer(String alias, String email, String password) {
         this.alias = alias;
-        this.emailId = email;
+        this.email = email;
         this.password = password;
     }
 
@@ -92,12 +90,12 @@ public class Trainer implements Serializable {
         this.password = password;
     }
 
-    public String getEmailId() {
-        return emailId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Date getCreatedAt() {

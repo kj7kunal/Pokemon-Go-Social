@@ -62,16 +62,15 @@ public class AuthController {
     }
 
     private BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
-    @SuppressWarnings("unchecked")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (trainerRepository.existsByAlias(signUpRequest.getAlias())) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Alias is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (trainerRepository.existsByEmailId(signUpRequest.getEmail())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+        if (trainerRepository.existsByEmail(signUpRequest.getEmail())) {
+            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -90,7 +89,7 @@ public class AuthController {
         Trainer result = trainerRepository.save(trainer);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/trainers/{id}")
+                .fromCurrentContextPath().path("/trainers/{id}")
                 .buildAndExpand(result.getId()).toUri();
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));

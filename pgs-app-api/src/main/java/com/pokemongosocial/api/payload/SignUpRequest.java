@@ -13,16 +13,18 @@ public class SignUpRequest {
 
     @NotBlank
     @Email
+    @Size(max = 40)
     private String email;
 
     @NotBlank
+    @Size(min = 3, max = 30)
     private String password;
 
-//    private LocalDate dob;
-//
-//    private Team team;
-//
-//    private Gender gender;
+    private LocalDate dob;
+
+    private Team team;
+
+    private Gender gender;
 
     public String getAlias() {
         return alias;
@@ -48,27 +50,27 @@ public class SignUpRequest {
         this.password = password;
     }
 
-//    public LocalDate getDob() {
-//        return dob;
-//    }
-//
-//    public void setDob(LocalDate dob) {
-//        this.dob = dob;
-//    }
-//
-//    public Gender getGender() {
-//        return gender;
-//    }
-//
-//    public void setGender(Gender gender) {
-//        this.gender = gender;
-//    }
-//
-//    public Team getTeam() {
-//        return team;
-//    }
-//
-//    public void setTeam(Team team) {
-//        this.team = team;
-//    }
+    public LocalDate getDob() {
+        return dob;
+    }
+
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }

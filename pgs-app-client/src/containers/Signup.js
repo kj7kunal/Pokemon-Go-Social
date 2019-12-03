@@ -1,6 +1,13 @@
 import React from 'react';
-import { Button, Row, Col, Form, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Button, Row, Col, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Signup.css";
+import { signup } from '../util/APIUtils';
+// import { Link } from 'react-router-dom';
+import {
+    ALIAS_MIN_LENGTH, ALIAS_MAX_LENGTH,
+    EMAIL_MAX_LENGTH,
+    PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH
+} from '../constants';
 
 {/* TODO:
   1. change team and gender fields to dropdown list
@@ -13,57 +20,103 @@ class Signup extends React.Component {
   constructor() {
     super();
     this.state = {
-      trainerID: '',
-      password: '',
-      error: '',
+      alias: {value:''},
+      email: {value:''},
+      password: {value:''},
+      confirmpassword: {value:''},
+      team: {value:''},
+      gender: {value:''}
     };
 
-    this.teamList = [
-    { id: 1, name: "Instinct" },
-    { id: 2, name: "Valor" },
-    { id: 3, name: "Mystic" }
-    ];
-
-    this.genderList = [
-    { id: 1, name: "male" },
-    { id: 2, name: "female" }
-    ];
-
+    this.handleAliasChange = this.handleAliasChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePassChange = this.handlePassChange.bind(this);
-    this.handleUserChange = this.handleUserChange.bind(this);
+    this.handleCPassChange = this.handleCPassChange.bind(this);
+    this.handleGChange = this.handleGChange.bind(this);
+    this.handleTChange = this.handleTChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.dismissError = this.dismissError.bind(this);
+    console.log(this.state)
   }
 
 
-  dismissError() {
-    this.setState({ error: '' });
+  handleGChange(event){
+    this.setState({ gender: this.inputG.value });
+      console.log(this.state);
   }
+  handleTChange(event){
+    this.setState({ team: this.inputT.value });
+      console.log(this.state);
+  }
+
+  handleAliasChange(event, validationFun) {
+    const target = event.target;
+    const inputValue = target.value;
+    console.log(this.state);
+    this.setState({
+      alias: inputValue,
+      ...validationFun(inputValue)
+    });
+  }
+  handleEmailChange(event, validationFun) {
+    const target = event.target;
+    const inputValue = target.value;
+    console.log(this.state);
+    this.setState({
+      email: inputValue,
+      ...validationFun(inputValue)
+    });
+  }
+  handlePassChange(event, validationFun) {
+    const target = event.target;
+    const inputValue = target.value;
+    console.log(this.state);
+    this.setState({
+      password: inputValue,
+      ...validationFun(inputValue)
+    });
+  }
+  handleCPassChange(event, validationFun) {
+    const target = event.target;
+    const inputValue = target.value;
+    console.log(this.state);
+    this.setState({
+      confirmpassword: inputValue,
+      ...validationFun(inputValue)
+    });
+  }
+
 
   handleSubmit(event) {
     event.preventDefault();
 
-    if (!this.state.trainerID) {
-      return this.setState({ error: 'Trainer ID is required' });
-    }
+    const signupRequest = {
+      alias: this.state.alias,
+      email: this.state.email,
+      password: this.state.password,
+      team: this.state.team,
+      gender: this.state.gender
+    };
+    console.log(signupRequest);
 
-    if (!this.state.password) {
-      return this.setState({ error: 'Password is required' });
-    }
+    signup(signupRequest)
+    .then(response => {
+        console.log("Successfully registered. Login to continue!");
+        this.props.history.push("/login");
+    }).catch(error => {
+      console.log(error.message);
+    });
 
-    return this.setState({ error: '' });
   }
 
-  handleUserChange(event) {
-    this.setState({
-      trainerID: event.target.value,
-    });
-  };
+  isFormInvalid() {
+    // console.log(this.state.alias.validatestatus,this.state.email.validatestatus,this.state.password.validatestatus,this.state.confirmpassword.validatestatus)
+    // console.log(this.state.alias.value,this.state.email.value,this.state.password.value,this.state.confirmpassword.value)
 
-  handlePassChange(event) {
-    this.setState({
-      password: event.target.value,
-    });
+    return !(this.state.alias.validatestatus === 'success' &&
+        this.state.email.validatestatus === 'success' &&
+        this.state.password.validatestatus === 'success'&&
+        this.state.confirmpassword.validatestatus === 'success'
+    );
   }
 
 
@@ -72,113 +125,313 @@ class Signup extends React.Component {
     return(
       <div className="Signup">
         <form onSubmit={this.handleSubmit}>
-          <Form>
-            <Row form>
-              <Col md={6}>
-                <FormGroup controlId="email" bsSize="small">
-                  <ControlLabel>Trainer ID</ControlLabel>
-                  <FormControl
-                    autoFocus
-                    type="trainerID"
-                    data-test="trainerID"
-                    value={this.state.trainerID}
-                    onChange={this.handleUserChange}
-                    />
-                  </FormGroup>
-              </Col>
-              <Col md={6}>
-                <FormGroup controlId="email" bsSize="small">
-                  <ControlLabel>Email ID</ControlLabel>
-                  <FormControl
-                    autoFocus
-                    type="emailID"
-                    data-test="emailID"
-                    value={this.state.emailID}
-                    onChange={this.handleFieldChange}
-                    />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row form>
-              <Col md={6}>
-                <FormGroup controlId="password" bsSize="small">
-                  <ControlLabel>Password</ControlLabel>
-                  <FormControl
-                    autoFocus
-                    type="password"
-                    data-test="password"
-                    value={this.state.password}
-                    onChange={this.handlePassChange}
+          <Row>
+            <Col md={6}>
+              <FormGroup controlId="alias" bsSize="small">
+                <ControlLabel>Trainer Alias</ControlLabel>
+                <FormControl
+                  autoFocus
+                  type="text"
+                  autoComplete="off"
+                  name="alias"
+                  placeholder="Your Unique trainer name"
+                  validatestatus={this.state.alias.validatestatus}
+                  help={this.state.alias.errorMsg}
+                  value={this.state.alias}
+                  onChange={(event) => this.handleAliasChange(event, this.validateAlias)}
                   />
                 </FormGroup>
-              </Col>
-              <Col md={6}>
-                <FormGroup controlId="confirmpassword" bsSize="small">
-                  <ControlLabel>Confirm Password</ControlLabel>
-                  <FormControl
-                    autoFocus
-                    type="password"
-                    data-test="password"
-                    value={this.state.confirmpassword}
-                    onChange={this.handleFieldChange}
+            </Col>
+            <Col md={6}>
+              <FormGroup controlId="email" bsSize="small">
+                <ControlLabel>Email ID</ControlLabel>
+                <FormControl
+                  autoFocus
+                  type="email"
+                  name="email"
+                  autoComplete="off"
+                  placeholder="Your Email ID"
+                  validatestatus={this.state.email.validatestatus}
+                  help={this.state.email.errorMsg}
+                  value={this.state.email}
+                  onChange={(event) => this.handleEmailChange(event,this.validateEmail)}
                   />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row form>
-              <Col md={4}>
-                <FormGroup controlId="date" bsSize="small">
-                  <ControlLabel>Date Of Birth</ControlLabel>
-                  <FormControl
-                    autoFocus
-                    type="date"
-                    data-test="DOB"
-                    value={this.state.DOB}
-                    onChange={this.handleFieldChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md={4}>
-                <FormGroup controlId="formControlsSelect" bsSize="small">
-                  <ControlLabel>Team</ControlLabel>
-                  <FormControl
-                    autoFocus
-                    type="select"
-                    data-test="team"
-                    value={this.state.confirmpassword}
-                    onChange={this.handleFieldChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md={4}>
-                <FormGroup controlId="formControlsSelect" bsSize="small">
-                  <ControlLabel>Gender</ControlLabel>
-                  <FormControl
-                    autoFocus
-                    type="select"
-                    data-test="gender"
-                    value={this.state.confirmpassword}
-                    onChange={this.handleFieldChange}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6}>
+              <FormGroup controlId="password" bsSize="small">
+                <ControlLabel>Password</ControlLabel>
+                <FormControl
+                  autoFocus
+                  type="password"
+                  name="password"
+                  autoComplete="off"
+                  placeholder="A password between 8 to 20 characters"
+                  validatestatus={this.state.password.validatestatus}
+                  help={this.state.password.errorMsg}
+                  value={this.state.password}
+                  onChange={(event) => this.handlePassChange(event, this.validatePassword)}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={6}>
+              <FormGroup controlId="confirmpassword" bsSize="small">
+                <ControlLabel>Confirm Password</ControlLabel>
+                <FormControl
+                  autoFocus
+                  type="password"
+                  name="confirmpassword"
+                  autoComplete="off"
+                  placeholder="Re-enter password"
+                  validatestatus={this.state.confirmpassword.validatestatus}
+                  help={this.state.confirmpassword.errorMsg}
+                  value={this.state.confirmpassword}
+                  onChange={(event) => this.handleCPassChange(event, this.validateConfirmPassword)}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6}>
+              <FormGroup controlId="team" bsSize="small">
+                <ControlLabel>Team</ControlLabel>
+                <FormControl
+                  autoFocus
+                  componentClass="select"
+                  name="team"
+                  placeholder="Your Team"
+                  value={this.state.team}
+                  inputRef={ tm => this.inputT=tm }
+                  onChange={this.handleTChange.bind(this)}>
+                  <option value="">select</option>
+                  <option value="INSTINCT">Instinct (Yellow)</option>
+                  <option value="VALOR">Valor (Red)</option>
+                  <option value="MYSTIC">Mystic (Blue)</option>
+                </FormControl>
+              </FormGroup>
+            </Col>
+            <Col md={6}>
+              <FormGroup controlId="gender" bsSize="small">
+                <ControlLabel>Gender</ControlLabel>
+                <FormControl
+                  autoFocus
+                  componentClass="select"
+                  name="gender"
+                  placeholder="Your Gender"
+                  value={this.state.gender}
+                  inputRef={ gen => this.inputG=gen }
+                  onChange={this.handleGChange.bind(this)}>
+                  <option value="">select</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                </FormControl>
+              </FormGroup>
+            </Col>
+          </Row>
 
-            <Button block type="submit">
-              Register
-            </Button>
-            {
-              this.state.error &&
-              <h3 data-test="error" onClick={this.dismissError}>
-                <button onClick={this.dismissError}>✖</button>
-                {this.state.error}
-              </h3>
-            }
-          </Form>
+          <Button block type="submit"
+          >
+            Register
+          </Button>
         </form>
       </div>
     )
   }
+
+  // Validation Functions
+
+  validateAlias = (alias) => {
+      if(alias.length < ALIAS_MIN_LENGTH) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Alias is too short (Minimum ${ALIAS_MIN_LENGTH} characters needed.)`
+          }
+      } else if (alias.length > ALIAS_MAX_LENGTH) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Alias is too long (Maximum ${ALIAS_MAX_LENGTH} characters allowed.)`
+          }
+      } else {
+          return {
+              validatestatus: 'success',
+              errorMsg: null,
+            };
+      }
+  }
+
+  validateEmail = (email) => {
+      if(!email) {
+          return {
+              validatestatus: 'error',
+              errorMsg: 'Email may not be empty'
+          }
+      }
+
+      const EMAIL_REGEX = RegExp('[^@ ]+@[^@ ]+\\.[^@ ]+');
+      if(!EMAIL_REGEX.test(email)) {
+          return {
+              validatestatus: 'error',
+              errorMsg: 'Email not valid'
+          }
+      }
+
+      if(email.length > EMAIL_MAX_LENGTH) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Email is too long (Maximum ${EMAIL_MAX_LENGTH} characters allowed)`
+          }
+      }
+
+      return {
+          validatestatus: 'success',
+          errorMsg: null
+      }
+  }
+
+  validateAliasAvailability() {
+      // First check for client side errors in username
+      const aliasValue = this.state.username;
+      const aliasValidation = this.validateAlias(aliasValue);
+
+      if(aliasValidation.validatestatus === 'error') {
+          this.setState({
+              alias: {
+                  value: aliasValue,
+                  ...aliasValidation
+              }
+          });
+          return;
+      }
+
+      this.setState({
+          alias: {
+              value: aliasValue,
+              validatestatus: 'success',//'validating',
+              errorMsg: null
+          }
+      });
+
+      // checkAliasAvailability(aliasValue)
+      // .then(response => {
+      //     if(response.available) {
+      //         this.setState({
+      //             alias: {
+      //                 value: aliasValue,
+      //                 validatestatus: 'success',
+      //                 errorMsg: null
+      //             }
+      //         });
+      //     } else {
+      //         this.setState({
+      //             alias: {
+      //                 value: aliasValue,
+      //                 validatestatus: 'error',
+      //                 errorMsg: 'This alias is already taken'
+      //             }
+      //         });
+      //     }
+      // }).catch(error => {
+      //     // Marking validatestatus as success, Form will be recchecked at server
+      //     this.setState({
+      //         alias: {
+      //             value: aliasValue,
+      //             validatestatus: 'success',
+      //             errorMsg: null
+      //         }
+      //     });
+      // });
+  }
+
+  validateEmailAvailability() {
+      // First check for client side errors in email
+      const emailValue = this.state.email;
+      const emailValidation = this.validateEmail(emailValue);
+
+      if(emailValidation.validatestatus === 'error') {
+          this.setState({
+              email: {
+                  value: emailValue,
+                  ...emailValidation
+              }
+          });
+          return;
+      }
+
+      this.setState({
+          email: {
+              value: emailValue,
+              validatestatus: 'success',//'validating',
+              errorMsg: null
+          }
+      });
+
+      // checkEmailAvailability(emailValue)
+      // .then(response => {
+      //     if(response.available) {
+      //         this.setState({
+      //             email: {
+      //                 value: emailValue,
+      //                 validatestatus: 'success',
+      //                 errorMsg: null
+      //             }
+      //         });
+      //     } else {
+      //         this.setState({
+      //             email: {
+      //                 value: emailValue,
+      //                 validatestatus: 'error',
+      //                 errorMsg: 'This Email is already registered'
+      //             }
+      //         });
+      //     }
+      // }).catch(error => {
+      //     // Marking validatestatus as success, Form will be recchecked at server
+      //     this.setState({
+      //         email: {
+      //             value: emailValue,
+      //             validatestatus: 'success',
+      //             errorMsg: null
+      //         }
+      //     });
+      // });
+  }
+
+  validatePassword = (password) => {
+      if(password.length < PASSWORD_MIN_LENGTH) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Password is too short (Minimum ${PASSWORD_MIN_LENGTH} characters needed.)`
+          }
+      } else if (password.length > PASSWORD_MAX_LENGTH) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Password is too long (Maximum ${PASSWORD_MAX_LENGTH} characters allowed.)`
+          }
+      } else {
+          return {
+              validatestatus: 'success',
+              errorMsg: null,
+          };
+      }
+  }
+
+  validateConfirmPassword = (confirmpassword) => {
+      if(confirmpassword === this.state.password) {
+          return {
+              validatestatus: 'success',
+              errorMsg: null,
+          }
+      } else {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Passwords don't match`
+          }
+      }
+  }
+
 }
+
 
 export default Signup;

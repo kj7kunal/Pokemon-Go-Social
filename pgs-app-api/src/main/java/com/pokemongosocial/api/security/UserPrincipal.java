@@ -39,7 +39,7 @@ public class UserPrincipal implements UserDetails {
         return new UserPrincipal(
                 trainer.getId(),
                 trainer.getAlias(),
-                trainer.getEmailId(),
+                trainer.getEmail(),
                 trainer.getPassword(),
                 authorities
         );

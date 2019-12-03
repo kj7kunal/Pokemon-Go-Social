@@ -3,15 +3,16 @@ import { Route, Switch } from "react-router-dom";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import Signup from "./containers/Signup"
-import NotFound from "./containers/NotFound";
+import NotFound from "./common/NotFound";
+import AppliedRoute from "./components/AppliedRoute";
 
-export default function Routes() {
+export default function Routes({ childProps }) {
   return (
     <Switch>
-      <Route path="/" exact component={Home} />
-      <Route path="/login" exact component={Login} />
-      <Route path="/signup" exact component={Signup} />
-      <Route component={NotFound} />  //undefined routes go to NotFound (default in switch)
+      <AppliedRoute path="/" exact component={Home} props={childProps} />
+      <AppliedRoute path="/login" exact component={Login} props={childProps} />
+      <AppliedRoute path="/signup" exact component={Signup} props={childProps} />
+      <Route component={NotFound} />
     </Switch>
   );
 }
