@@ -34,19 +34,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             logger.info("Starting Authentication: "+request.getRequestURI());
             String jwt = request.getHeader("Authorization");
-
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                Claims claims = tokenProvider.getClaimsFromJWT(jwt);
-                String alias = claims.getSubject();
-                Collection<? extends GrantedAuthority> authorities = (Collection<? extends GrantedAuthority>) claims.get("scope");
-                /*
-                    Encoding the user's username and roles inside JWT claims
-                    and create the UserDetails object by parsing those claims from the JWT.
-                    That would avoid the following database hit.
-                 */
-                UserDetails userDetails = loginUserDetailsService.loadUserByUsername(alias); // Just checking if user exists or not
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(alias, null, authorities);
+                Long Id = tokenProvider.getIdFromJWT(jwt);
+
+                UserDetails userDetails = loginUserDetailsService.loadUserById(Id);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {

@@ -28,23 +28,22 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder().setIssuer("PokemonGOS")
-                .setSubject(userPrincipal.getUsername())
-                .claim("scope", userPrincipal.getAuthorities())
+                .setSubject(Long.toString(userPrincipal.getId()))
                 .setIssuedAt(now).setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public Claims getClaimsFromJWT(String token) {
-        return Jwts.parser()
+    public Long getIdFromJWT(String token) {
+        return Long.parseLong(Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws((token.replace("Bearer ","")))
-                .getBody();
+                .getBody().getSubject());
     }
 
     public boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken.replace("Bearer ",""));
             return true;
         } catch (SignatureException ex) {
             logger.error("Invalid JWT signature");

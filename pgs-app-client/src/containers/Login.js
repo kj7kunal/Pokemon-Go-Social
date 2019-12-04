@@ -56,6 +56,7 @@ class Login extends React.Component {
         console.log("successfully logged in.")
         this.props.history.push("/");
     }).catch(error => {
+        this.setState({ password: {value: '' }});
         if(error.status === 401) {
             console.log('Your Username or Password is incorrect. Please try again!');
         } else {
@@ -80,7 +81,7 @@ class Login extends React.Component {
               placeholder="Your registered trainer name"
               validatestatus={this.state.alias.validatestatus}
               help={this.state.alias.errorMsg}
-              value={this.state.alias}
+              value={this.state.alias.value}
               required={true}
               onChange={(event) => this.handleAliasChange(event, this.validateAlias)}
             />
@@ -95,7 +96,7 @@ class Login extends React.Component {
               placeholder="Your password (8<chars<20)"
               validatestatus={this.state.password.validatestatus}
               help={this.state.password.errorMsg}
-              value={this.state.password}
+              value={this.state.password.value}
               required={true}
               onChange={(event) => this.handlePassChange(event, this.validatePassword)}
             />

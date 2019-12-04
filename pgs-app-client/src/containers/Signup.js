@@ -124,7 +124,7 @@ class Signup extends React.Component {
                   placeholder="Your Unique trainer name"
                   validatestatus={this.state.alias.validatestatus}
                   help={this.state.alias.errorMsg}
-                  value={this.state.alias}
+                  value={this.state.alias.value}
                   onChange={(event) => this.handleAliasChange(event, this.validateAlias)}
                 />
               </FormGroup>
@@ -140,7 +140,7 @@ class Signup extends React.Component {
                   placeholder="Your Email ID"
                   validatestatus={this.state.email.validatestatus}
                   help={this.state.email.errorMsg}
-                  value={this.state.email}
+                  value={this.state.email.value}
                   onChange={(event) => this.handleEmailChange(event,this.validateEmail)}
                 />
               </FormGroup>
@@ -158,7 +158,7 @@ class Signup extends React.Component {
                   placeholder="A password between 8 to 20 characters"
                   validatestatus={this.state.password.validatestatus}
                   help={this.state.password.errorMsg}
-                  value={this.state.password}
+                  value={this.state.password.value}
                   onChange={(event) => this.handlePassChange(event, this.validatePassword)}
                 />
               </FormGroup>
@@ -174,7 +174,7 @@ class Signup extends React.Component {
                   placeholder="Re-enter password"
                   validatestatus={this.state.confirmpassword.validatestatus}
                   help={this.state.confirmpassword.errorMsg}
-                  value={this.state.confirmpassword}
+                  value={this.state.confirmpassword.value}
                   onChange={(event) => this.handleCPassChange(event, this.validateConfirmPassword)}
                 />
               </FormGroup>
@@ -189,7 +189,7 @@ class Signup extends React.Component {
                   componentClass="select"
                   name="team"
                   placeholder="Your Team"
-                  value={this.state.team}
+                  value={this.state.team.value}
                   inputRef={ tm => this.inputT=tm }
                   onChange={this.handleTChange.bind(this)}>
                   <option value="">select</option>
@@ -207,7 +207,7 @@ class Signup extends React.Component {
                   componentClass="select"
                   name="gender"
                   placeholder="Your Gender"
-                  value={this.state.gender}
+                  value={this.state.gender.value}
                   inputRef={ gen => this.inputG=gen }
                   onChange={this.handleGChange.bind(this)}>
                   <option value="">select</option>
