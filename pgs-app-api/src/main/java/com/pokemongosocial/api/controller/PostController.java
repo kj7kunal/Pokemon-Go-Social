@@ -2,6 +2,8 @@ package com.pokemongosocial.api.controller;
 
 import com.pokemongosocial.api.entity.Post;
 import com.pokemongosocial.api.exception.ResourceNotFoundException;
+import com.pokemongosocial.api.payload.ApiResponse;
+import com.pokemongosocial.api.payload.PostResponse;
 import com.pokemongosocial.api.repository.PostRepository;
 import com.pokemongosocial.api.repository.TrainerRepository;
 import com.pokemongosocial.api.security.CurrentUser;
@@ -10,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class PostController {
@@ -23,46 +28,64 @@ public class PostController {
     @Autowired
     TrainerRepository trainerRepository;
 
+    private List<PostResponse> getPostResponses(List<Post> postList){
+        return postList.stream().map(post -> {
+            PostResponse postResponse = new PostResponse();
+            postResponse.setId(post.getId());
+            postResponse.setContent(post.getContent());
+            postResponse.setCreatedBy((post.getTrainer().getAlias()));
+            postResponse.setUpdatedAt(post.getUpdatedAt());
+            return postResponse;
+        }).collect(Collectors.toList());
+    }
+
     // For PokeNews
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/posts")
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<PostResponse> getAllPosts() {
+        return getPostResponses(postRepository.findAll());
     }
 
     // For Searching Posts by Trainer Alias
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/posts/search")
-    public List<Post> searchPostByAlias(@RequestParam(value = "alias") String alias) {
-        return postRepository.findByTrainerAlias(alias)
-                .orElseThrow(() -> new ResourceNotFoundException("Post", "Trainer Alias", alias));
+    public List<PostResponse> searchPostByAlias(@RequestParam(value = "alias") String alias) {
+        return getPostResponses(postRepository.findByTrainerAlias(alias)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "Trainer Alias", alias)));
     }
 
     // For other user's wall posts
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/trainers/{trainerId}/posts")
-    public List<Post> getAllPostsByTrainerId(@PathVariable(value = "trainerId") Long trainerId) {
-        return postRepository.findByTrainerId(trainerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Post", "trainerId", trainerId));
+    public List<PostResponse> getAllPostsByTrainerId(@PathVariable(value = "trainerId") Long trainerId) {
+        return getPostResponses(postRepository.findByTrainerId(trainerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "trainerId", trainerId)));
     }
 
     // For my wall posts
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/trainers/me/posts")
-    public List<Post> getAllMyPosts(@CurrentUser UserPrincipal currentUser) {
-        return postRepository.findByTrainerId(currentUser.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Posts", "Alias", currentUser.getUsername()));
+    public List<PostResponse> getAllMyPosts(@CurrentUser UserPrincipal currentUser) {
+        return getPostResponses(postRepository.findByTrainerId(currentUser.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Posts", "Alias", currentUser.getUsername())));
     }
 
     // For creating your new post
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/trainers/me/posts")
-    public Post createPost(@CurrentUser UserPrincipal currentUser,
+    public ResponseEntity<?> createPost(@CurrentUser UserPrincipal currentUser,
                            @Valid @RequestBody Post post) {
-        return trainerRepository.findById(currentUser.getId()).map(trainer -> {
+        Post createdPost = trainerRepository.findById(currentUser.getId()).map(trainer -> {
             post.setTrainer(trainer);
             return postRepository.save(post);
         }).orElseThrow(() -> new ResourceNotFoundException("Trainer", "Alias", currentUser.getUsername()));
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/trainers/me/posts/{id}")
+                .buildAndExpand(createdPost.getId()).toUri();
+
+        return ResponseEntity.created(location)
+                .body(new ApiResponse(true, "Post Created Successfully"));
     }
 
     // For editing your old post

@@ -48,6 +48,8 @@ public class Post implements Serializable {
         return id;
     }
 
+    public Trainer getTrainer() { return trainer; }
+
     public void setTrainer(Trainer trainer) { this.trainer = trainer; }
 
     public String getContent() { return content; }
