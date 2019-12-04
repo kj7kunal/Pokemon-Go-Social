@@ -1,9 +1,9 @@
 import React from "react";
 import { PageHeader, ListGroup, ListGroupItem , Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import {createPost, getAllPosts} from '../util/APIUtils';
-import "./PokeNews.css";
+import {createPost, getAllMyPosts} from '../util/APIUtils';
+import "./Trainer.css";
 
-class PokeNews extends React.Component {
+class Trainer extends React.Component {
   constructor(props) {
     super(props);
 
@@ -14,6 +14,7 @@ class PokeNews extends React.Component {
     };
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    console.log(this.props);
   }
 
   loadAllPosts() {
@@ -25,7 +26,7 @@ class PokeNews extends React.Component {
       isLoading: true
     });
 
-    getAllPosts()
+    getAllMyPosts()
     .then(response => {
       this.setState({
         posts: response,
@@ -69,7 +70,7 @@ class PokeNews extends React.Component {
         this.setState({ isLoading: false });
         this.setState({ content: {value: '' }});
         this.loadAllPosts();
-        this.props.history.push("/pokenews");
+        this.props.history.push("/trainer");
     }).catch(error => {
         this.setState({ isLoading: false });
         this.setState({ content: {value: '' }});
@@ -95,8 +96,8 @@ class PokeNews extends React.Component {
 
   render() {
     return (
-      <div className="PokeNews">
-        <PageHeader>PokeNews</PageHeader>
+      <div className="Trainer">
+        <PageHeader>My Page</PageHeader>
         <div className="CreatePost">
           <form onSubmit={this.handleSubmit}>
             <FormGroup controlId="content" bsSize="large">
@@ -130,4 +131,4 @@ class PokeNews extends React.Component {
 }
 
 
-export default PokeNews;
+export default Trainer;

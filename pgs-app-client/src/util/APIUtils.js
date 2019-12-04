@@ -94,7 +94,7 @@ export function getAllMyPosts() {
     }
 
     return request({
-        url: API_BASE_URL + "trainers/me/posts",
+        url: API_BASE_URL + "/trainers/me/posts",
         method: 'GET'
     });
 }
