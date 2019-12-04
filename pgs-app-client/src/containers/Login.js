@@ -52,9 +52,7 @@ class Login extends React.Component {
     login(loginRequest)
     .then(response => {
         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        // this.props.onLogin();
-        console.log("successfully logged in.")
-        this.props.history.push("/");
+        this.props.onLogin();
     }).catch(error => {
         this.setState({ password: {value: '' }});
         if(error.status === 401) {
@@ -81,7 +79,7 @@ class Login extends React.Component {
               placeholder="Your registered trainer name"
               validatestatus={this.state.alias.validatestatus}
               help={this.state.alias.errorMsg}
-              value={this.state.alias.value}
+              defaultValue=""
               required={true}
               onChange={(event) => this.handleAliasChange(event, this.validateAlias)}
             />
@@ -96,7 +94,7 @@ class Login extends React.Component {
               placeholder="Your password (8<chars<20)"
               validatestatus={this.state.password.validatestatus}
               help={this.state.password.errorMsg}
-              value={this.state.password.value}
+              defaultValue=""
               required={true}
               onChange={(event) => this.handlePassChange(event, this.validatePassword)}
             />

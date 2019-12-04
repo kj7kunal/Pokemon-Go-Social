@@ -63,3 +63,58 @@ export function getCurrentUser() {
         method: 'GET'
     });
 }
+
+
+export function createPost(postData) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/trainers/me/posts",
+        method: 'POST',
+        body: JSON.stringify(postData)
+    });
+}
+
+export function getAllPosts() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/posts",
+        method: 'GET'
+    });
+}
+
+export function getAllMyPosts() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "trainers/me/posts",
+        method: 'GET'
+    });
+}
+
+export function searchPostByAlias(alias) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+    return request({
+        url: API_BASE_URL + "/posts/search?alias=" + alias,
+        method: 'GET'
+    });
+}
+
+export function getAllPostsByTrainerId(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+    return request({
+        url: API_BASE_URL + "/trainers/"+ id + "/posts",
+        method: 'GET'
+    });
+}

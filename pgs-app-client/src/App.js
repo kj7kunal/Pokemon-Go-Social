@@ -49,7 +49,7 @@ class App extends React.Component {
   }
 
   // Handle Logout, Set currentUser and isAuthenticated state which will be passed to other components
-  handleLogout(redirectTo="/") {
+  handleLogout() {
     localStorage.removeItem(ACCESS_TOKEN);
 
     this.setState({
@@ -57,7 +57,7 @@ class App extends React.Component {
       isAuthenticated: false
     });
 
-    this.props.history.push(redirectTo);
+    this.props.history.push("/login");
     console.log("Successfully logged out");
   }
 
@@ -79,7 +79,8 @@ class App extends React.Component {
     }
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
-      currentUser: this.state.currentUser
+      currentUser: this.state.currentUser,
+      onLogin: this.handleLogin
     };
 
     return (
@@ -94,8 +95,16 @@ class App extends React.Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              {this.state.isAuthenticated
+              {!this.state.isAuthenticated
                 ? <Fragment>
+                    <LinkContainer to="/signup">
+                      <NavItem>Signup</NavItem>
+                    </LinkContainer>
+                    <LinkContainer to="/login">
+                      <NavItem>Login</NavItem>
+                    </LinkContainer>
+                  </Fragment>
+                : <Fragment>
                     <LinkContainer to="/pokenews">
                       <NavItem>PokeNews</NavItem>
                     </LinkContainer>
@@ -106,14 +115,6 @@ class App extends React.Component {
                       <NavItem>Search</NavItem>
                     </LinkContainer>
                     <NavItem onClick={this.handleLogout}>Logout</NavItem>
-                  </Fragment>
-                : <Fragment>
-                    <LinkContainer to="/signup">
-                      <NavItem>Signup</NavItem>
-                    </LinkContainer>
-                    <LinkContainer to="/login">
-                      <NavItem>Login</NavItem>
-                    </LinkContainer>
                   </Fragment>
               }
             </Nav>
