@@ -13,7 +13,6 @@ class Search extends React.Component {
       posts: {value:[]}
     };
     this.handleContentChange = this.handleContentChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   searchPosts(searchKey) {
@@ -37,7 +36,7 @@ class Search extends React.Component {
       this.setState({
         isLoading: false,
         content: {value:''},
-        posts: {value:[]}
+        posts: [{id: 123, content: "", createdBy: "No posts yet", updatedAt: ""}]
       });
     });
   }
@@ -52,16 +51,12 @@ class Search extends React.Component {
 
 
   handleContentChange(event){
+    event.preventDefault();
     const target = event.target;
     const inputValue = target.value;
     this.setState({ content: inputValue });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-
     this.setState({ isLoading: true });
-    this.searchPosts(this.state.content);
+    this.searchPosts(inputValue);
   }
 
   renderPostList(posts) {
@@ -84,7 +79,7 @@ class Search extends React.Component {
     return (
       <div className="Search">
         <div className="SearchKey">
-          <form onSubmit={this.handleSubmit}>
+          <form>
             <FormGroup controlId="content" bsSize="large">
               <ControlLabel>Search for posts by a Trainer's Alias</ControlLabel>
               <FormControl
@@ -97,11 +92,6 @@ class Search extends React.Component {
                 onChange={(event) => this.handleContentChange(event)}
               />
             </FormGroup>
-            <Button block type="submit"
-              bsStyle="primary"
-              bsSize="large">
-              POST
-            </Button>
           </form>
         </div>
         <div className="PostList">

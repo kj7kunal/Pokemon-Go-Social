@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<List<Post>> findByTrainerId(Long trainerId);
-    Optional<List<Post>> findByTrainerAlias(String trainerAlias);
     Optional<Post> findByIdAndTrainerId(Long Id, Long trainerId);
-
+    Optional<List<Post>> findByTrainerAliasContaining(String alias);
 }

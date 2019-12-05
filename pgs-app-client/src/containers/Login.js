@@ -10,7 +10,6 @@ class Login extends React.Component {
     this.state = {
       isLoading: false,
       alias: {value:''},
-      email: {value:''},
       password: {value:''},
       error: {value:''}
     };
@@ -21,7 +20,7 @@ class Login extends React.Component {
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return this.state.alias.length > 0 && this.state.password.length > 0;
   }
 
   handleAliasChange(event, validationFun) {

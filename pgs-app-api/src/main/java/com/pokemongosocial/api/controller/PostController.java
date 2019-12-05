@@ -50,7 +50,7 @@ public class PostController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/posts/search")
     public List<PostResponse> searchPostByAlias(@RequestParam(value = "alias") String alias) {
-        return getPostResponses(postRepository.findByTrainerAlias(alias)
+        return getPostResponses(postRepository.findByTrainerAliasContaining(alias)
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "Trainer Alias", alias)));
     }
 
