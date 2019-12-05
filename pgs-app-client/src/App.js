@@ -109,7 +109,7 @@ class App extends React.Component {
                       <NavItem>PokeNews</NavItem>
                     </LinkContainer>
                     <LinkContainer to="/trainer">
-                      <NavItem>Trainer</NavItem>
+                      <NavItem>{this.state.currentUser.alias}</NavItem>
                     </LinkContainer>
                     <LinkContainer to="/search">
                       <NavItem>Search</NavItem>

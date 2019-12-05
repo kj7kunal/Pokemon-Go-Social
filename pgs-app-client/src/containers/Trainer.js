@@ -95,7 +95,7 @@ class Trainer extends React.Component {
   render() {
     return (
       <div className="Trainer">
-        <PageHeader>My Page</PageHeader>
+        <PageHeader>{this.props.currentUser.alias}'s Page</PageHeader>
         <div className="CreatePost">
           <form onSubmit={this.handleSubmit}>
             <FormGroup controlId="content" bsSize="large">
