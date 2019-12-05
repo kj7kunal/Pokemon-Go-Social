@@ -14,7 +14,6 @@ class Trainer extends React.Component {
     };
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    console.log(this.props);
   }
 
   loadAllPosts() {
@@ -63,7 +62,6 @@ class Trainer extends React.Component {
     const postRequest = {
       content: this.state.content
     };
-    console.log(postRequest);
 
     createPost(postRequest)
     .then(response => {

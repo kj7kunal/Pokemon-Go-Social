@@ -62,7 +62,6 @@ class PokeNews extends React.Component {
     const postRequest = {
       content: this.state.content
     };
-    console.log(postRequest);
 
     createPost(postRequest)
     .then(response => {

@@ -9,4 +9,14 @@
     text-align: left;
   }
 
+  .Signup h5{
+    padding: 20px 0;
+    color: red;
+  }
+
+  .Signup span{
+    color: red;
+    font-size: 10px;
+  }
+
 }

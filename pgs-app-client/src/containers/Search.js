@@ -14,7 +14,6 @@ class Search extends React.Component {
     };
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    console.log(this.props);
   }
 
   searchPosts(searchKey) {
@@ -62,7 +61,6 @@ class Search extends React.Component {
     event.preventDefault();
 
     this.setState({ isLoading: true });
-    console.log(this.state.content);
     this.searchPosts(this.state.content);
   }
 

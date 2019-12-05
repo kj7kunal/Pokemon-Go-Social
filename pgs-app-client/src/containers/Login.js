@@ -12,6 +12,7 @@ class Login extends React.Component {
       alias: {value:''},
       email: {value:''},
       password: {value:''},
+      error: {value:''}
     };
 
     this.handleAliasChange = this.handleAliasChange.bind(this);
@@ -24,6 +25,7 @@ class Login extends React.Component {
   }
 
   handleAliasChange(event, validationFun) {
+    this.setState({ error: {value: ''}});
     const target = event.target;
     const inputValue = target.value;
     this.setState({
@@ -32,6 +34,7 @@ class Login extends React.Component {
     });
   }
   handlePassChange(event, validationFun) {
+    this.setState({ error: {value: ''}});
     const target = event.target;
     const inputValue = target.value;
     this.setState({
@@ -47,7 +50,6 @@ class Login extends React.Component {
       alias: this.state.alias,
       password: this.state.password
     };
-    console.log(loginRequest);
 
     login(loginRequest)
     .then(response => {
@@ -55,6 +57,7 @@ class Login extends React.Component {
         this.props.onLogin();
     }).catch(error => {
         this.setState({ password: {value: '' }});
+        this.setState({ error: {value: error.message}});
         if(error.status === 401) {
             console.log('Your Username or Password is incorrect. Please try again!');
         } else {
@@ -79,7 +82,7 @@ class Login extends React.Component {
               placeholder="Your registered trainer name"
               validatestatus={this.state.alias.validatestatus}
               help={this.state.alias.errorMsg}
-              defaultValue=""
+              value={this.state.alias.value}
               required={true}
               onChange={(event) => this.handleAliasChange(event, this.validateAlias)}
             />
@@ -94,7 +97,7 @@ class Login extends React.Component {
               placeholder="Your password (8<chars<20)"
               validatestatus={this.state.password.validatestatus}
               help={this.state.password.errorMsg}
-              defaultValue=""
+              value={this.state.password.value}
               required={true}
               onChange={(event) => this.handlePassChange(event, this.validatePassword)}
             />
@@ -103,6 +106,7 @@ class Login extends React.Component {
             Login
           </Button>
         </form>
+        <h5>{this.state.error.value}</h5>
       </div>
     )
   }

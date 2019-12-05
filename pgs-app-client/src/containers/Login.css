@@ -9,4 +9,9 @@
     text-align: left;
   }
 
+  .Login h5{
+    padding: 20px 0;
+    color: red;
+  }
+
 }
