@@ -1,5 +1,5 @@
 import React from "react";
-import { ListGroup, ListGroupItem , Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { ListGroup, ListGroupItem, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import {searchPostByAlias} from '../util/APIUtils';
 import "./Search.css";
 

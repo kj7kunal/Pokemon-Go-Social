@@ -1,14 +1,48 @@
 version: '3'
 services:
+  # App backend service
+  app-server:
+    # Configuration for building the docker image for the backend service
+    build:
+      context: pgs-app-api # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    restart: always
+    depends_on:
+      - pogos-mysql # This service depends on mysql. Start that first.
+    environment: # Pass environment variables to the service
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/pogosDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+      - frontend
+
+  # Frontend Service
+  app-client:
+    build:
+      context: pgs-app-client # Use an image built from the specified dockerfile in the `polling-app-client` directory.
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_BASE_URL: http://127.0.0.1:8080
+    ports:
+      - "9090:80" # Forward the exposed port 80 on the container to port 80 on the host machine
+    restart: always
+    depends_on:
+      - app-server
+    networks:
+      - frontend
+  # DATABASE: MYSQL
   pogos-mysql:
     image: mysql:latest   #default
     container_name: pogos-mysql   #container name
     restart: always
     environment:
-      MYSQL_ENDPOINT: 'localhost'
-      MYSQL_DATABASE: 'pogosDB'
-      MYSQL_USER: 'root'    # default
-      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_ENDPOINT: localhost
+      MYSQL_DATABASE: pogosDB
+      MYSQL_USER: root   # default
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       TZ :  ' Asia / Tokyo'
     ports:
@@ -18,18 +52,13 @@ services:
     - '3306'
     volumes:
       - pogosDV:/var/lib/mysql
-
+    networks:
+      - backend
+#Volumes
 volumes:
   pogosDV:
 
-
-  # api:
-  #   container_name: pogos-api
-  #   restart: always
-  #   build:
-  #     context: ./pgs-app-api
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     - mysql
-  #   ports:
-  #     - "9000:9000"
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
+  frontend:
