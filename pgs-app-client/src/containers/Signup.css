@@ -1,0 +1,22 @@
+@media all and (min-width: 480px) {
+  .Signup {
+    padding: 10px 0;
+  }
+
+  .Signup form {
+    margin: 0 auto;
+    max-width: 500px;
+    text-align: left;
+  }
+
+  .Signup h5{
+    padding: 20px 0;
+    color: red;
+  }
+
+  .Signup span{
+    color: red;
+    font-size: 10px;
+  }
+
+}

@@ -1,66 +1,89 @@
 import React from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
+import { login } from '../util/APIUtils';
+import { ACCESS_TOKEN } from '../constants';
 
 class Login extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      trainerID: '',
-      password: '',
-      error: '',
+      isLoading: false,
+      alias: {value:''},
+      password: {value:''},
+      error: {value:''}
     };
 
+    this.handleAliasChange = this.handleAliasChange.bind(this);
     this.handlePassChange = this.handlePassChange.bind(this);
-    this.handleUserChange = this.handleUserChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.dismissError = this.dismissError.bind(this);
   }
 
+  validateForm() {
+    return this.state.alias.length > 0 && this.state.password.length > 0;
+  }
 
-  dismissError() {
-    this.setState({ error: '' });
+  handleAliasChange(event, validationFun) {
+    this.setState({ error: {value: ''}});
+    const target = event.target;
+    const inputValue = target.value;
+    this.setState({
+      alias: inputValue,
+      ...validationFun(inputValue)
+    });
+  }
+  handlePassChange(event, validationFun) {
+    this.setState({ error: {value: ''}});
+    const target = event.target;
+    const inputValue = target.value;
+    this.setState({
+      password: inputValue,
+      ...validationFun(inputValue)
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    if (!this.state.trainerID) {
-      return this.setState({ error: 'Trainer ID is required' });
-    }
+    const loginRequest = {
+      alias: this.state.alias,
+      password: this.state.password
+    };
 
-    if (!this.state.password) {
-      return this.setState({ error: 'Password is required' });
-    }
-
-    return this.setState({ error: '' });
-  }
-
-  handleUserChange(event) {
-    this.setState({
-      trainerID: event.target.value,
-    });
-  };
-
-  handlePassChange(event) {
-    this.setState({
-      password: event.target.value,
+    login(loginRequest)
+    .then(response => {
+        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+        this.props.onLogin();
+    }).catch(error => {
+        this.setState({ password: {value: '' }});
+        this.setState({ error: {value: error.message}});
+        if(error.status === 401) {
+            console.log('Your Username or Password is incorrect. Please try again!');
+        } else {
+            console.log(error.message);
+        }
+        this.setState({ isLoading: false });
     });
   }
+
 
   render(){
 
     return(
       <div className="Login">
         <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="email" bsSize="large">
-            <ControlLabel>Trainer ID</ControlLabel>
+          <FormGroup controlId="alias" bsSize="large">
+            <ControlLabel>Trainer Alias</ControlLabel>
             <FormControl
               autoFocus
-              type="trainerID"
-              data-test="trainerID"
-              value={this.state.trainerID}
-              onChange={this.handleUserChange}
+              type="text"
+              name="alias"
+              placeholder="Your registered trainer name"
+              validatestatus={this.state.alias.validatestatus}
+              help={this.state.alias.errorMsg}
+              value={this.state.alias.value}
+              required={true}
+              onChange={(event) => this.handleAliasChange(event, this.validateAlias)}
             />
           </FormGroup>
           <FormGroup controlId="password" bsSize="large">
@@ -68,25 +91,63 @@ class Login extends React.Component {
             <FormControl
               autoFocus
               type="password"
-              data-test="password"
-              value={this.state.password}
-              onChange={this.handlePassChange}
+              name="password"
+              autoComplete="off"
+              placeholder="Your password (8<chars<20)"
+              validatestatus={this.state.password.validatestatus}
+              help={this.state.password.errorMsg}
+              value={this.state.password.value}
+              required={true}
+              onChange={(event) => this.handlePassChange(event, this.validatePassword)}
             />
           </FormGroup>
           <Button block type="submit">
             Login
           </Button>
-          {
-            this.state.error &&
-            <h3 data-test="error" onClick={this.dismissError}>
-              <button onClick={this.dismissError}>✖</button>
-              {this.state.error}
-            </h3>
-          }
         </form>
+        <h5>{this.state.error.value}</h5>
       </div>
     )
   }
+
+  validateAlias = (alias) => {
+      if(!alias) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Alias is not enterred.)`
+          }
+      } else if (alias.length < 0) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Alias is not enterred.)`
+          }
+      } else {
+          return {
+              validatestatus: 'success',
+              errorMsg: null,
+            };
+      }
+  }
+
+  validatePassword = (password) => {
+      if(!password) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Password is not enterred.)`
+          }
+      } else if (password.length < 0) {
+          return {
+              validatestatus: 'error',
+              errorMsg: `Password is not enterred.)`
+          }
+      } else {
+          return {
+              validatestatus: 'success',
+              errorMsg: null,
+            };
+      }
+  }
 }
+
 
 export default Login;

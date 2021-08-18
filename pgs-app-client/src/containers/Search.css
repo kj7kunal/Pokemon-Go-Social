@@ -1,0 +1,31 @@
+@media all and (min-width: 480px) {
+  .Search {
+    padding: 0px 30px;
+  }
+
+  .Search .SearchKey {
+    margin: auto;
+    max-width: auto;
+    text-align: left;
+  }
+
+  .Search .PostList {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: left;
+    margin: auto;
+    max-width: auto;
+  }
+  .Search .PostList h3{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+  .Search .PostList h4{
+    text-align: left;
+  }
+  .Search .PostList h5{
+    text-align: right;
+  }
+
+}

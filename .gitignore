@@ -3,9 +3,20 @@ node_modules
 
 # testing
 
-# production
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+.metadata
+.project
+.recommenders
+.settings
+.springBeans
+target
 
 # misc
 .DS_Store
 .env
+.sass-cache
 npm-debug.log

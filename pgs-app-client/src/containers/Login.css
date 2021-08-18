@@ -6,6 +6,12 @@
   .Login form {
     margin: 0 auto;
     max-width: 320px;
+    text-align: left;
+  }
+
+  .Login h5{
+    padding: 20px 0;
+    color: red;
   }
 
 }

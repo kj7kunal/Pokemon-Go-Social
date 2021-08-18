@@ -1,0 +1,35 @@
+@media all and (min-width: 480px) {
+  .PokeNews {
+    padding: 0px 30px;
+  }
+
+  .PokeNews .CreatePost {
+    padding-top: 20px;
+    padding-bottom: 50px;
+    margin: auto;
+    max-width: auto;
+    text-align: left;
+    font-size: 20px;
+  }
+
+  .PokeNews .PostList {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: auto;
+    max-width: auto;
+  }
+  .PokeNews .PostList h3{
+    padding-right: 80px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+  .PokeNews .PostList h4{
+    padding-left: 10px;
+    text-align: left;
+  }
+  .PokeNews .PostList h5{
+    text-align: right;
+  }
+
+}
